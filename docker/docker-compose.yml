@@ -1,0 +1,23 @@
+version: "3.2"
+
+services:
+
+### OMS-LEGACY        #######################################
+
+    oms-legacy:
+        build:
+          context: ./$PATH_OMS_LEGACY/oms-legacy/
+          dockerfile: ./Dockerfile.dev
+        image: aegee/oms-legacy:dev
+        restart: always
+        volumes:
+            - type: bind
+              source: ./$PATH_OMS_LEGACY/../src/
+              target: /usr/app/src
+            - type: bind
+              source: ./$PATH_OMS_LEGACY/../logs/
+              target: /usr/app/logs
+networks:
+  default:
+    external:
+      name: OMS

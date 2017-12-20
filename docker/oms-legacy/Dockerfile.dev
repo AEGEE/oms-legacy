@@ -1,0 +1,63 @@
+FROM php:5.6.32-apache-jessie
+
+#
+#--------------------------------------------------------------------------
+# OS-level Dependencies
+#--------------------------------------------------------------------------
+
+RUN DEBIAN_FRONTEND=noninteractive
+ENV TERM xterm
+ENV APACHE_LOG_DIR=/usr/app/logs/
+ENV APACHE_RUN_USER=laradock
+ENV APACHE_RUN_USER=laradock
+
+RUN apt-get update
+RUN apt-get install -y git
+RUN apt-get install -y zip unzip
+RUN apt-get clean
+
+# Make the terminal look fancy
+RUN echo "export PS1=\"\[\e[31m\]\u\[\e[m\]@\[\e[32m\][\[\e[m\]\[\e[32m\]oms-legacy\[\e[m\]\[\e[32m\]]\[\e[m\]\[\e[34m\]\H\[\e[m\]:\[\e[33m\]\w\[\e[m\]\\$  \"" >> ~/.bashrc
+
+
+
+#
+#--------------------------------------------------------------------------
+# App-level Dependencies
+#--------------------------------------------------------------------------
+
+# Install composer and add its bin to the PATH.
+RUN curl -s http://getcomposer.org/installer | php && \
+    echo "export PATH=${PATH}:/var/www/vendor/bin" >> ~/.bashrc && \
+    mv composer.phar /usr/local/bin/composer
+
+ARG PUID=1000
+ARG PGID=1000
+RUN groupadd -g $PGID laradock && \
+    useradd -u $PUID -g laradock -m laradock
+
+# Source the bash
+RUN . ~/.bashrc
+
+# Do a clean install of Laravel 5.4 (latest to support PHP 5.6)
+# RUN composer create-project laravel/laravel /usr/app/src "5.4.*"
+
+
+
+#
+#--------------------------------------------------------------------------
+# Bootstrap
+#--------------------------------------------------------------------------
+
+WORKDIR /usr/app/src
+
+COPY config/apache2.conf /etc/apache2/
+COPY config/000-default.conf /etc/apache2/sites-available/
+
+
+RUN chown -R laradock:laradock /usr/app/src
+
+
+
+EXPOSE 80
+CMD ["apache2-foreground"]
