@@ -17,6 +17,8 @@ services:
             - type: bind
               source: ./$PATH_OMS_LEGACY/../logs/
               target: /usr/app/logs
+        expose:
+          - "80"
 networks:
   default:
     external:

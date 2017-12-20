@@ -51,13 +51,12 @@ RUN . ~/.bashrc
 
 WORKDIR /usr/app/src
 
+COPY bootstrap.sh /usr/app/scripts/
 COPY config/apache2.conf /etc/apache2/
 COPY config/000-default.conf /etc/apache2/sites-available/
 
 
-RUN chown -R laradock:laradock /usr/app/src
+RUN chown -R laradock:laradock /usr/app/
+RUN a2enmod rewrite
 
-
-
-EXPOSE 80
-CMD ["apache2-foreground"]
+CMD bash /usr/app/scripts/bootstrap.sh && apache2-foreground
