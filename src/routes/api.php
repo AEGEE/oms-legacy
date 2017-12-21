@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Legacy\AuthIntranet;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,14 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::get('/intranet/login', function (Request $request) {
+    $ldap = new AuthIntranet();
+
+    if ($ldap->auth('username', 'password')) {
+        return response()->success($ldap->getUsername(), null, "User succesfully authorized against intranet server!");
+    } else {
+        return response()->failure();
+    }
 });

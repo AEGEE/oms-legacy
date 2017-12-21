@@ -14,7 +14,15 @@ ENV APACHE_RUN_USER=laradock
 RUN apt-get update
 RUN apt-get install -y git
 RUN apt-get install -y zip unzip
+
+# Install and enable php-ldap
+RUN apt-get install -y libldb-dev libldap2-dev
+RUN ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so \
+    && ln -s /usr/lib/x86_64-linux-gnu/liblber.so /usr/lib/liblber.so
+RUN docker-php-ext-install ldap
+
 RUN apt-get clean
+
 
 # Make the terminal look fancy
 RUN echo "export PS1=\"\[\e[31m\]\u\[\e[m\]@\[\e[32m\][\[\e[m\]\[\e[32m\]oms-legacy\[\e[m\]\[\e[32m\]]\[\e[m\]\[\e[34m\]\H\[\e[m\]:\[\e[33m\]\w\[\e[m\]\\$  \"" >> ~/.bashrc
@@ -25,6 +33,7 @@ RUN echo "export PS1=\"\[\e[31m\]\u\[\e[m\]@\[\e[32m\][\[\e[m\]\[\e[32m\]oms-leg
 #--------------------------------------------------------------------------
 # App-level Dependencies
 #--------------------------------------------------------------------------
+
 
 # Install composer and add its bin to the PATH.
 RUN curl -s http://getcomposer.org/installer | php && \
