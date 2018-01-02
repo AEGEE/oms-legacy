@@ -1,0 +1,6 @@
+<?php
+
+return [
+    'AUTHINTRANET_URI' => env('LEGACY_AUTHINTRANET_URI', ''),
+    'AUTHINTRANET_BASEDN' => env('LEGACY_AUTHINTRANET_BASEDN', ''),
+];
