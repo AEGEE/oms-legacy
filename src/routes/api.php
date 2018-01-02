@@ -18,10 +18,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/intranet/login', function (Request $request) {
+Route::post('/intranet/login', function (Request $request) {
     $ldap = new AuthIntranet();
 
-    if ($ldap->auth('username', 'password')) {
+    $username = Input::get('legacy_username');
+    $password = Input::get('legacy_password');
+    
+    if ($ldap->auth($username, $password)) {
         return response()->success($ldap->getUsername(), null, "User succesfully authorized against intranet server!");
     } else {
         return response()->failure();
