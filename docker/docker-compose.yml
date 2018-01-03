@@ -17,11 +17,9 @@ services:
             - type: bind
               source: ./$PATH_OMS_LEGACY/../logs/
               target: /usr/app/logs
-        expose:
-          - "8090"
         labels:
           - "traefik.backend=oms-legacy"
-          - "traefik.port=8090"
+          - "traefik.port=80"
           - "traefik.enable=true"
           - "registry.categories=(users, 10);(antennae, 10)"
           - "registry.backend=/api"
