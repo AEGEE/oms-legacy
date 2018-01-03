@@ -9,9 +9,11 @@ before_script:
     - cd docker
     - docker network create OMS
     - travis_retry docker-compose up -d
-    - sleep 60
+    - sleep 30
     - docker-compose logs
 
 
 script:
     - docker-compose exec -T -d oms-legacy true 2>/dev/null || exit 1
+# Since this requires a whitelisted IP, this is disabled by default.
+#    - sudo docker-compose run -T php-fpm ./vendor/bin/phpunit
