@@ -23,7 +23,7 @@ Route::post('/intranet/login', function (Request $request) {
 
     $username = Input::get('legacy_username');
     $password = Input::get('legacy_password');
-    
+
     if ($ldap->auth($username, $password)) {
         return response()->success($ldap->getUsername(), null, "User succesfully authorized against intranet server!");
     } else {

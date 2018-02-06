@@ -19,6 +19,7 @@ services:
               target: /usr/app/logs
         labels:
           - "traefik.backend=oms-legacy"
+          - "traefik.frontend.rule=HostRegexp:{domain:[a-z0-9.]+};PathPrefix:/services/oms-legacy/;PathPrefixStrip:/services/oms-legacy/"
           - "traefik.port=80"
           - "traefik.enable=true"
           - "registry.categories=(users, 10);(antennae, 10)"
